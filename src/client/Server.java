@@ -1,4 +1,4 @@
-package client;
+package Client;
 
 import java.io.PrintWriter;
 import java.net.Socket;

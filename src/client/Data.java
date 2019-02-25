@@ -1,4 +1,4 @@
-package client;
+package Client;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +19,7 @@ public class Data {
     //MySQL配置时的用户名
     String user = "root";
     //MySQL配置时的密码
-    String password = "123123";
+    String password = "19981114";
 	
 	public static List<Customer> customers = new ArrayList<Customer>();
 	

@@ -1,4 +1,4 @@
-package client;
+package Client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,6 +11,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -24,9 +25,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class HomePage extends JFrame implements ActionListener{
+public class HomePage extends JFrame{
 	protected JLabel HUserName;
-	protected JButton btnUserGroup,btnMessageGroup;
+	protected JButton btnUserGroup,btnMessageGroup,btnPicture,btnSend;
+	private JFileChooser chooser = new JFileChooser();
 	Data db = new Data();
 	
 	public HomePage(Customer cus) {
@@ -58,19 +60,12 @@ public class HomePage extends JFrame implements ActionListener{
 			}
 		});
 		getContentPane().add(tabbedPane,BorderLayout.CENTER);
-		
-		
-		
-		
+	
 		//具体填充
 		HUserName = new JLabel("亲爱的：" + Customer.getUserName() + "用户");
 		btnUserGroup = new JButton("用户分组");
 		btnMessageGroup = new JButton("信息群发");
-//		left_function.add(HUserName);
-//		left_function.add(btnUserGroup);
-//		left_function.add(btnMessageGroup);
-		
-		
+	
 //用JList构造用户列表
 		final JList<String> userlist = new JList<String>();
 		
@@ -113,20 +108,18 @@ public class HomePage extends JFrame implements ActionListener{
 		
 		//设置默认选中项
 		userlist.setSelectedIndex(1);
-		
-		//添加到功能区的用户区内容面板容器
-//		right_users.add(userlist);
 
 		Icon imageIcon = null;
 		TextField ChatWin = new TextField(10);
 		TextField ChatEdit = new TextField(10);
-//		final JLabel tabLabelA = new JLabel();
-//		tabLabelA.setText("用户列表");
-//		tabbedPane.addTab("用户列表",imageIcon,tabLabelA,"点击查看用户列表");//将标签组件添加到选项卡中
+		btnPicture = new JButton("添加图片");
+		btnPicture.addActionListener(new btnListener());
+		btnSend = new JButton("发送");
+		
 		JPanel tabPanelA = new JPanel(new BorderLayout());
 		JPanel chatwindow = new JPanel(new BorderLayout());
 		JPanel func_edit = new JPanel(new BorderLayout());	
-		JPanel func = new JPanel();
+		JPanel func = new JPanel(); //小按钮面板
 		
 		tabPanelA.add(userlist, BorderLayout.WEST);
 		tabPanelA.add(chatwindow, BorderLayout.CENTER);
@@ -142,19 +135,27 @@ public class HomePage extends JFrame implements ActionListener{
 		tabLabelC.setText("信息群发");
 		tabbedPane.addTab("信息群发",imageIcon,tabLabelC,"点击查看信息群发");
 		tabbedPane.setSelectedIndex(0);
+		func.add(btnPicture);
+		func.add(btnSend);
 		
         this.setSize(600,600);
     	this.setLocation(300,400);
     	this.setVisible(true);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		JButton btn = (JButton)e.getSource();
-		
-//		if(btn == btnFunc) {
-//			
-//		}
+	public class btnListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton btn = (JButton)e.getSource();
+			
+			if(btn == btnPicture) {
+				int result = chooser.showOpenDialog(null);
+				if(result == JFileChooser.APPROVE_OPTION){
+					String name = chooser.getSelectedFile().getPath();
+					System.out.println(name);
+				}
+			}
+		}
 	}
 	
 	
