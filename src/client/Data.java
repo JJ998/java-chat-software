@@ -55,7 +55,8 @@ public class Data {
 	}
 	
 	public Customer getCustomerbyId(Integer id) {
-		Customer customer = new Customer("xxx", "1232");
+		Double randName = new Double(Math.random());
+		Customer customer = new Customer(randName.toString(), "1232");
 		return customer;
 	}
 }

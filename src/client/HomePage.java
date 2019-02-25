@@ -3,9 +3,11 @@ package Client;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.TextArea;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileFilter;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,9 +26,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class HomePage extends JFrame{
 	protected JLabel HUserName;
+	protected JPanel ChatWin;
+	protected TextArea ChatEdit;
 	protected JButton btnUserGroup,btnMessageGroup,btnPicture,btnSend;
 	private JFileChooser chooser = new JFileChooser();
 	Data db = new Data();
@@ -43,7 +48,7 @@ public class HomePage extends JFrame{
 		JPanel function_window = new JPanel(function_layout); // 功能区
 		this.add(function_window, BorderLayout.WEST);
 		JPanel chat_window = new JPanel(); // 聊天窗
-		this.add(chat_window, BorderLayout.CENTER);	
+		this.add(chat_window, BorderLayout.CENTER);
 		
 		
 		
@@ -66,7 +71,7 @@ public class HomePage extends JFrame{
 		btnUserGroup = new JButton("用户分组");
 		btnMessageGroup = new JButton("信息群发");
 	
-//用JList构造用户列表
+		//用JList构造用户列表
 		final JList<String> userlist = new JList<String>();
 		
 		//设置首选大小
@@ -87,9 +92,6 @@ public class HomePage extends JFrame{
 		}
 		userlist.setListData(usernames);
 		
-		//加个滚轮
-		JScrollPane listPane = new JScrollPane(userlist);
-		
 		//添加选项选中状态被改变的监听器
 		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -106,28 +108,32 @@ public class HomePage extends JFrame{
 			}
 		});
 		
-		//设置默认选中项
+		// 设置默认选中项
 		userlist.setSelectedIndex(1);
+		userlist.setVisibleRowCount(10);
+		JScrollPane UserListPanel = new JScrollPane(userlist);
+		UserListPanel.setHorizontalScrollBarPolicy(i);
 
 		Icon imageIcon = null;
-		TextField ChatWin = new TextField(10);
-		TextField ChatEdit = new TextField(10);
-		btnPicture = new JButton("添加图片");
+		ChatWin = new JPanel(); // 信息显示框
+		ChatWin.setFocusable(false);
+		ChatEdit = new TextArea(10, 20); // 信息输入框
+		btnPicture = new JButton("添加图片"); // 图片选择按钮
 		btnPicture.addActionListener(new btnListener());
-		btnSend = new JButton("发送");
+		btnSend = new JButton("发送"); // 发送按钮
 		
 		JPanel tabPanelA = new JPanel(new BorderLayout());
 		JPanel chatwindow = new JPanel(new BorderLayout());
-		JPanel func_edit = new JPanel(new BorderLayout());	
-		JPanel func = new JPanel(); //小按钮面板
+		JPanel func_edit = new JPanel(new BorderLayout()); // 功能面板，包括小按钮和信息输入框
+		JPanel func = new JPanel(); // 小按钮面板
 		
-		tabPanelA.add(userlist, BorderLayout.WEST);
+		tabPanelA.add(UserListPanel, BorderLayout.WEST);
 		tabPanelA.add(chatwindow, BorderLayout.CENTER);
 		chatwindow.add(ChatWin, BorderLayout.CENTER);
 		chatwindow.add(func_edit, BorderLayout.SOUTH);
 		func_edit.add(func, BorderLayout.NORTH);
-		func_edit.add(ChatEdit, BorderLayout.CENTER);
-		tabbedPane.addTab("用户列表",imageIcon,tabPanelA,"点击查看用户列表");//将标签组件添加到选项卡中
+		func_edit.add(new JScrollPane(ChatEdit), BorderLayout.CENTER);
+		tabbedPane.addTab("用户列表",imageIcon,tabPanelA,"点击查看用户列表"); // 将标签组件添加到选项卡中
 		final JLabel tabLabelB = new JLabel();
 		tabLabelB.setText("用户分组");
 		tabbedPane.addTab("用户分组",imageIcon,tabLabelB,"点击查看用户分组");
@@ -149,10 +155,13 @@ public class HomePage extends JFrame{
 			JButton btn = (JButton)e.getSource();
 			
 			if(btn == btnPicture) {
+				FileNameExtensionFilter PicFilter = new FileNameExtensionFilter("图像文件（JPG/PNG/BMP/GIF）", "JPG", "JPEG", "PNG", "BMP", "GIF"); // 设置文件过滤器，只列出图片
+				chooser.setFileFilter(PicFilter);
 				int result = chooser.showOpenDialog(null);
 				if(result == JFileChooser.APPROVE_OPTION){
-					String name = chooser.getSelectedFile().getPath();
-					System.out.println(name);
+					String FileName = chooser.getSelectedFile().getPath();
+					System.out.println(FileName);
+					ChatEdit.setText(FileName);
 				}
 			}
 		}

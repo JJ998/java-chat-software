@@ -14,9 +14,9 @@ public class Customer {
         this.userName = userName;
         this.password = password;
         this.friends = new ArrayList<Integer>();
-        friends.add(1);
-        friends.add(2);
-        friends.add(3);
+        for(int i = 0; i < 50; i++) {
+        	friends.add(i);
+        }
     }
      
     public static String getUserName() {
