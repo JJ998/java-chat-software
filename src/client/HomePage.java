@@ -112,7 +112,7 @@ public class HomePage extends JFrame{
 		userlist.setSelectedIndex(1);
 		userlist.setVisibleRowCount(10);
 		JScrollPane UserListPanel = new JScrollPane(userlist);
-		UserListPanel.setHorizontalScrollBarPolicy(i);
+//		UserListPanel.setHorizontalScrollBarPolicy(i);
 
 		Icon imageIcon = null;
 		ChatWin = new JPanel(); // пео╒отй╬©Р
