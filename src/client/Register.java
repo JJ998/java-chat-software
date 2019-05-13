@@ -85,7 +85,7 @@ public class Register extends JFrame implements ActionListener{
 			password = new String(txtPSW.getPassword());
 			
 			for(i = 0;i < Data.customers.size();i++) {
-				if(Data.customers.get(i).getUserName().equals(userName)) {
+                if (Customer.getUserName().equals(userName)) {
 					break;
 				}
 			}

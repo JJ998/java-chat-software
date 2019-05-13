@@ -11,7 +11,7 @@ public class Customer {
     }
 
     public Customer(String userName, String password) {
-        this.userName = userName;
+        Customer.userName = userName;
         this.password = password;
         this.friends = new ArrayList<Integer>();
         for(int i = 0; i < 50; i++) {
@@ -24,7 +24,7 @@ public class Customer {
     }
      
     public void setUserName(String userName) {
-        this.userName = userName;
+        Customer.userName = userName;
     }
      
     public String getPSW() {

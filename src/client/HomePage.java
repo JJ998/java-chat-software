@@ -88,7 +88,7 @@ public class HomePage extends JFrame{
 		int i = 0;
 		for(Integer friend_id : cus.friends) {
 			Customer friend = db.getCustomerbyId(friend_id);
-			usernames[i++] = friend.getUserName();
+			usernames[i++] = Customer.getUserName();
 		}
 		userlist.setListData(usernames);
 		
