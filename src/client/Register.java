@@ -107,7 +107,5 @@ public class Register extends JFrame implements ActionListener{
 			txtConfirmedPSW.setText("");
 			txtUserName.setFocusable(true);
 		}
-		
 	}
-
 }

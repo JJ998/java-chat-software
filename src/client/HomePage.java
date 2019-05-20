@@ -88,7 +88,7 @@ public class HomePage extends JFrame{
 		int i = 0;
 		for(Integer friend_id : cus.friends) {
 			Customer friend = db.getCustomerbyId(friend_id);
-			usernames[i++] = Customer.getUserName();
+			usernames[i++] = friend.getUserName();
 		}
 		userlist.setListData(usernames);
 		
@@ -112,7 +112,7 @@ public class HomePage extends JFrame{
 		userlist.setSelectedIndex(1);
 		userlist.setVisibleRowCount(10);
 		JScrollPane UserListPanel = new JScrollPane(userlist);
-		UserListPanel.setHorizontalScrollBarPolicy(i);
+//		UserListPanel.setHorizontalScrollBarPolicy(i);
 
 		Icon imageIcon = null;
 		ChatWin = new JPanel(); // –≈œ¢œ‘ æøÚ
@@ -166,7 +166,4 @@ public class HomePage extends JFrame{
 			}
 		}
 	}
-	
-	
-	
 }
