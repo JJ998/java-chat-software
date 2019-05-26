@@ -1,169 +1,146 @@
-package Client;
+package client;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.TextArea;
-import java.awt.TextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileFilter;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class HomePage extends JFrame{
-	protected JLabel HUserName;
-	protected JPanel ChatWin;
-	protected TextArea ChatEdit;
-	protected JButton btnUserGroup,btnMessageGroup,btnPicture,btnSend;
-	private JFileChooser chooser = new JFileChooser();
-	Data db = new Data();
-	
-	public HomePage(Customer cus) {
-		super("Ö÷Ò³Ãæ");
-		initComponent(cus);
-	}
-	
-	//³õÊ¼»¯¿Ø¼þ
-	public void initComponent(Customer cus) {
-		//»®·ÖÇøÓò
-		BorderLayout function_layout = new BorderLayout();
-		JPanel function_window = new JPanel(function_layout); // ¹¦ÄÜÇø
-		this.add(function_window, BorderLayout.WEST);
-		JPanel chat_window = new JPanel(); // ÁÄÌì´°
-		this.add(chat_window, BorderLayout.CENTER);
-		
-		
-		
-		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		//ÉèÖÃÑ¡Ïî¿¨±êÇ©µÄ²¼¾Ö·½Ê½
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		tabbedPane.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				//»ñµÃ±»Ñ¡ÖÐÑ¡Ïî¿¨µÄË÷Òý
-				int selectedIndex = tabbedPane.getSelectedIndex();
-				//»ñµÃÖÆ¶¨Ë÷ÒýµÄÑ¡Ïî¿¨±êÇ©
-				String title = tabbedPane.getTitleAt(selectedIndex);
-				System.out.println(title);
-			}
-		});
-		getContentPane().add(tabbedPane,BorderLayout.CENTER);
-	
-		//¾ßÌåÌî³ä
-		HUserName = new JLabel("Ç×°®µÄ£º" + Customer.getUserName() + "ÓÃ»§");
-		btnUserGroup = new JButton("ÓÃ»§·Ö×é");
-		btnMessageGroup = new JButton("ÐÅÏ¢Èº·¢");
-	
-		//ÓÃJList¹¹ÔìÓÃ»§ÁÐ±í
-		final JList<String> userlist = new JList<String>();
-		
-		//ÉèÖÃÊ×Ñ¡´óÐ¡
-		userlist.setPreferredSize(new Dimension(200,200));
-		
-		//ÔÊÐí¿É¼ä¶ÏµÄ¶àÑ¡
-		ListSelectionModel listSelectionModel;
-		userlist.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		listSelectionModel = userlist.getSelectionModel();
-		
-		//ÉèÖÃÏÔÊ¾Êý¾Ý£¨ÄÚ²¿½«×Ô¶¯·â×°³ÉListModel)
-		int lengthoffriends = cus.friends.size();
-		String[] usernames = new String[lengthoffriends];
-		int i = 0;
-		for(Integer friend_id : cus.friends) {
-			Customer friend = db.getCustomerbyId(friend_id);
-			usernames[i++] = friend.getUserName();
-		}
-		userlist.setListData(usernames);
-		
-		//Ìí¼ÓÑ¡ÏîÑ¡ÖÐ×´Ì¬±»¸Ä±äµÄ¼àÌýÆ÷
-		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				//»ñÈ¡ËùÓÐ±»Ñ¡ÖÐµÄÑ¡ÏîË÷Òý
-				int[] indices = userlist.getSelectedIndices();
-				//»ñÈ¡Ñ¡ÏîÊý¾ÝµÄListModel
-				ListModel<String> listModel = userlist.getModel();
-				//Êä³öÑ¡ÖÐµÄÑ¡Ïî
-				for(int index : indices) {
-					System.out.println("Ñ¡ÖÐ£º" + index + " = " + listModel.getElementAt(index));
-				}
-				System.out.println();
-			}
-		});
-		
-		// ÉèÖÃÄ¬ÈÏÑ¡ÖÐÏî
-		userlist.setSelectedIndex(1);
-		userlist.setVisibleRowCount(10);
-		JScrollPane UserListPanel = new JScrollPane(userlist);
+public class HomePage extends JFrame {
+    protected JLabel HUserName;
+    protected JPanel ChatWin;
+    protected TextArea ChatEdit;
+    protected JButton btnUserGroup, btnMessageGroup, btnPicture, btnSend;
+    Data db = new Data();
+    private JFileChooser chooser = new JFileChooser();
+
+    public HomePage(Customer cus) {
+        super("Home");
+        initComponent(cus);
+    }
+
+    public void initComponent(Customer cus) {
+        BorderLayout function_layout = new BorderLayout();
+        JPanel function_window = new JPanel(function_layout); // friend list container
+        this.add(function_window, BorderLayout.WEST);
+        JPanel chat_window = new JPanel(); // chat window container
+        this.add(chat_window, BorderLayout.CENTER);
+
+
+        final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+        // friend list
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                int selectedIndex = tabbedPane.getSelectedIndex();
+                String title = tabbedPane.getTitleAt(selectedIndex);
+                System.out.println(title);
+            }
+        });
+        getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        HUserName = new JLabel("User " + Customer.getUserName() + "ï¿½Ã»ï¿½");
+        btnUserGroup = new JButton("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½");
+        btnMessageGroup = new JButton("ï¿½ï¿½Ï¢Èºï¿½ï¿½");
+
+        //ï¿½ï¿½JListï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ð±ï¿½
+        final JList<String> userlist = new JList<String>();
+
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Ð¡
+        userlist.setPreferredSize(new Dimension(200, 200));
+
+        //ï¿½ï¿½ï¿½ï¿½É¼ï¿½ÏµÄ¶ï¿½Ñ¡
+        ListSelectionModel listSelectionModel;
+        userlist.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listSelectionModel = userlist.getSelectionModel();
+
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½×°ï¿½ï¿½ListModel)
+        int lengthoffriends = cus.friends.size();
+        String[] usernames = new String[lengthoffriends];
+        int i = 0;
+        for (Integer friend_id : cus.friends) {
+            Customer friend = db.getCustomerbyId(friend_id);
+            usernames[i++] = friend.getUserName();
+        }
+        userlist.setListData(usernames);
+
+        //ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Ñ¡ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ä±ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                //ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ð±ï¿½Ñ¡ï¿½Ðµï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                int[] indices = userlist.getSelectedIndices();
+                //ï¿½ï¿½È¡Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½ListModel
+                ListModel<String> listModel = userlist.getModel();
+                //ï¿½ï¿½ï¿½Ñ¡ï¿½Ðµï¿½Ñ¡ï¿½ï¿½
+                for (int index : indices) {
+                    System.out.println("Ñ¡ï¿½Ð£ï¿½" + index + " = " + listModel.getElementAt(index));
+                }
+                System.out.println();
+            }
+        });
+
+        // ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½
+        userlist.setSelectedIndex(1);
+        userlist.setVisibleRowCount(10);
+        JScrollPane UserListPanel = new JScrollPane(userlist);
 //		UserListPanel.setHorizontalScrollBarPolicy(i);
 
-		Icon imageIcon = null;
-		ChatWin = new JPanel(); // ÐÅÏ¢ÏÔÊ¾¿ò
-		ChatWin.setFocusable(false);
-		ChatEdit = new TextArea(10, 20); // ÐÅÏ¢ÊäÈë¿ò
-		btnPicture = new JButton("Ìí¼ÓÍ¼Æ¬"); // Í¼Æ¬Ñ¡Ôñ°´Å¥
-		btnPicture.addActionListener(new btnListener());
-		btnSend = new JButton("·¢ËÍ"); // ·¢ËÍ°´Å¥
-		
-		JPanel tabPanelA = new JPanel(new BorderLayout());
-		JPanel chatwindow = new JPanel(new BorderLayout());
-		JPanel func_edit = new JPanel(new BorderLayout()); // ¹¦ÄÜÃæ°å£¬°üÀ¨Ð¡°´Å¥ºÍÐÅÏ¢ÊäÈë¿ò
-		JPanel func = new JPanel(); // Ð¡°´Å¥Ãæ°å
-		
-		tabPanelA.add(UserListPanel, BorderLayout.WEST);
-		tabPanelA.add(chatwindow, BorderLayout.CENTER);
-		chatwindow.add(ChatWin, BorderLayout.CENTER);
-		chatwindow.add(func_edit, BorderLayout.SOUTH);
-		func_edit.add(func, BorderLayout.NORTH);
-		func_edit.add(new JScrollPane(ChatEdit), BorderLayout.CENTER);
-		tabbedPane.addTab("ÓÃ»§ÁÐ±í",imageIcon,tabPanelA,"µã»÷²é¿´ÓÃ»§ÁÐ±í"); // ½«±êÇ©×é¼þÌí¼Óµ½Ñ¡Ïî¿¨ÖÐ
-		final JLabel tabLabelB = new JLabel();
-		tabLabelB.setText("ÓÃ»§·Ö×é");
-		tabbedPane.addTab("ÓÃ»§·Ö×é",imageIcon,tabLabelB,"µã»÷²é¿´ÓÃ»§·Ö×é");
-		final JLabel tabLabelC = new JLabel();
-		tabLabelC.setText("ÐÅÏ¢Èº·¢");
-		tabbedPane.addTab("ÐÅÏ¢Èº·¢",imageIcon,tabLabelC,"µã»÷²é¿´ÐÅÏ¢Èº·¢");
-		tabbedPane.setSelectedIndex(0);
-		func.add(btnPicture);
-		func.add(btnSend);
-		
-        this.setSize(600,600);
-    	this.setLocation(300,400);
-    	this.setVisible(true);
-	}
-	
-	public class btnListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JButton btn = (JButton)e.getSource();
-			
-			if(btn == btnPicture) {
-				FileNameExtensionFilter PicFilter = new FileNameExtensionFilter("Í¼ÏñÎÄ¼þ£¨JPG/PNG/BMP/GIF£©", "JPG", "JPEG", "PNG", "BMP", "GIF"); // ÉèÖÃÎÄ¼þ¹ýÂËÆ÷£¬Ö»ÁÐ³öÍ¼Æ¬
-				chooser.setFileFilter(PicFilter);
-				int result = chooser.showOpenDialog(null);
-				if(result == JFileChooser.APPROVE_OPTION){
-					String FileName = chooser.getSelectedFile().getPath();
-					System.out.println(FileName);
-					ChatEdit.setText(FileName);
-				}
-			}
-		}
-	}
+        Icon imageIcon = null;
+        ChatWin = new JPanel(); // ï¿½ï¿½Ï¢ï¿½ï¿½Ê¾ï¿½ï¿½
+        ChatWin.setFocusable(false);
+        ChatEdit = new TextArea(10, 20); // ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½
+        btnPicture = new JButton("ï¿½ï¿½ï¿½Í¼Æ¬"); // Í¼Æ¬Ñ¡ï¿½ï¿½Å¥
+        btnPicture.addActionListener(new btnListener());
+        btnSend = new JButton("ï¿½ï¿½ï¿½ï¿½"); // ï¿½ï¿½ï¿½Í°ï¿½Å¥
+
+        JPanel tabPanelA = new JPanel(new BorderLayout());
+        JPanel chatwindow = new JPanel(new BorderLayout());
+        JPanel func_edit = new JPanel(new BorderLayout()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å£¬ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½
+        JPanel func = new JPanel(); // Ð¡ï¿½ï¿½Å¥ï¿½ï¿½ï¿½
+
+        tabPanelA.add(UserListPanel, BorderLayout.WEST);
+        tabPanelA.add(chatwindow, BorderLayout.CENTER);
+        chatwindow.add(ChatWin, BorderLayout.CENTER);
+        chatwindow.add(func_edit, BorderLayout.SOUTH);
+        func_edit.add(func, BorderLayout.NORTH);
+        func_edit.add(new JScrollPane(ChatEdit), BorderLayout.CENTER);
+        tabbedPane.addTab("ï¿½Ã»ï¿½ï¿½Ð±ï¿½", imageIcon, tabPanelA, "ï¿½ï¿½ï¿½ï¿½é¿´ï¿½Ã»ï¿½ï¿½Ð±ï¿½"); // ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ñ¡ï¿½î¿¨ï¿½ï¿½
+        final JLabel tabLabelB = new JLabel();
+        tabLabelB.setText("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½");
+        tabbedPane.addTab("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½", imageIcon, tabLabelB, "ï¿½ï¿½ï¿½ï¿½é¿´ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½");
+        final JLabel tabLabelC = new JLabel();
+        tabLabelC.setText("ï¿½ï¿½Ï¢Èºï¿½ï¿½");
+        tabbedPane.addTab("ï¿½ï¿½Ï¢Èºï¿½ï¿½", imageIcon, tabLabelC, "ï¿½ï¿½ï¿½ï¿½é¿´ï¿½ï¿½Ï¢Èºï¿½ï¿½");
+        tabbedPane.setSelectedIndex(0);
+        func.add(btnPicture);
+        func.add(btnSend);
+
+        this.setSize(600, 600);
+        this.setLocation(300, 400);
+        this.setVisible(true);
+    }
+
+    public class btnListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton btn = (JButton) e.getSource();
+
+            if (btn == btnPicture) {
+                FileNameExtensionFilter PicFilter = new FileNameExtensionFilter("Í¼ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½JPG/PNG/BMP/GIFï¿½ï¿½", "JPG", "JPEG", "PNG", "BMP", "GIF"); // ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½Ð³ï¿½Í¼Æ¬
+                chooser.setFileFilter(PicFilter);
+                int result = chooser.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    String FileName = chooser.getSelectedFile().getPath();
+                    System.out.println(FileName);
+                    ChatEdit.setText(FileName);
+                }
+            }
+        }
+    }
 }
