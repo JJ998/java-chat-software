@@ -17,16 +17,17 @@ public class Data {
     String password = "19981114";
 
     public static void init() {
-        customers.add(new Customer("chf", "2333"));
+        customers.add(new Customer("ark", "123"));
     }
 
-    public void read() {
+    public void read(String table, String where) {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, user, password);
             if (!con.isClosed())
                 System.out.println("Succeeded connecting to the Database!");
             Statement statement = con.createStatement();
+            String readSQL = "select * from " + table + " where " + where;
 
             con.close();
         } catch (ClassNotFoundException e) {

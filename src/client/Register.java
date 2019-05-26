@@ -64,7 +64,6 @@ public class Register extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "please confirm password", "empty confirm password", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
             if (!String.valueOf(txtConfirmedPSW.getPassword()).equals(String.valueOf(txtPSW.getPassword()))) {
                 JOptionPane.showMessageDialog(this, "password not equal", "confirm password failed", JOptionPane.ERROR_MESSAGE);
                 return;

@@ -43,66 +43,56 @@ public class HomePage extends JFrame {
         });
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-        //�������
-        HUserName = new JLabel("User " + Customer.getUserName() + "�û�");
-        btnUserGroup = new JButton("�û�����");
-        btnMessageGroup = new JButton("��ϢȺ��");
+        HUserName = new JLabel("User " + Customer.getUserName());
+        btnUserGroup = new JButton("Friends");
+        btnMessageGroup = new JButton("Message");
 
-        //��JList�����û��б�
+        //user list
         final JList<String> userlist = new JList<String>();
-
-        //������ѡ��С
         userlist.setPreferredSize(new Dimension(200, 200));
 
-        //����ɼ�ϵĶ�ѡ
         ListSelectionModel listSelectionModel;
         userlist.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listSelectionModel = userlist.getSelectionModel();
 
-        //������ʾ���ݣ��ڲ����Զ���װ��ListModel)
         int lengthoffriends = cus.friends.size();
         String[] usernames = new String[lengthoffriends];
         int i = 0;
         for (Integer friend_id : cus.friends) {
             Customer friend = db.getCustomerbyId(friend_id);
-            usernames[i++] = friend.getUserName();
+            usernames[i++] = Customer.getUserName();
         }
         userlist.setListData(usernames);
 
-        //���ѡ��ѡ��״̬���ı�ļ�����
         listSelectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                //��ȡ���б�ѡ�е�ѡ������
                 int[] indices = userlist.getSelectedIndices();
-                //��ȡѡ�����ݵ�ListModel
                 ListModel<String> listModel = userlist.getModel();
-                //���ѡ�е�ѡ��
                 for (int index : indices) {
-                    System.out.println("ѡ�У�" + index + " = " + listModel.getElementAt(index));
+                    System.out.println("user" + index + " = " + listModel.getElementAt(index));
                 }
                 System.out.println();
             }
         });
 
-        // ����Ĭ��ѡ����
         userlist.setSelectedIndex(1);
         userlist.setVisibleRowCount(10);
         JScrollPane UserListPanel = new JScrollPane(userlist);
 //		UserListPanel.setHorizontalScrollBarPolicy(i);
 
         Icon imageIcon = null;
-        ChatWin = new JPanel(); // ��Ϣ��ʾ��
+        ChatWin = new JPanel();
         ChatWin.setFocusable(false);
-        ChatEdit = new TextArea(10, 20); // ��Ϣ�����
-        btnPicture = new JButton("���ͼƬ"); // ͼƬѡ��ť
+        ChatEdit = new TextArea(10, 20);
+        btnPicture = new JButton("send files");
         btnPicture.addActionListener(new btnListener());
-        btnSend = new JButton("����"); // ���Ͱ�ť
+        btnSend = new JButton("send");
 
         JPanel tabPanelA = new JPanel(new BorderLayout());
         JPanel chatwindow = new JPanel(new BorderLayout());
-        JPanel func_edit = new JPanel(new BorderLayout()); // ������壬����С��ť����Ϣ�����
-        JPanel func = new JPanel(); // С��ť���
+        JPanel func_edit = new JPanel(new BorderLayout());
+        JPanel func = new JPanel();
 
         tabPanelA.add(UserListPanel, BorderLayout.WEST);
         tabPanelA.add(chatwindow, BorderLayout.CENTER);
@@ -110,13 +100,13 @@ public class HomePage extends JFrame {
         chatwindow.add(func_edit, BorderLayout.SOUTH);
         func_edit.add(func, BorderLayout.NORTH);
         func_edit.add(new JScrollPane(ChatEdit), BorderLayout.CENTER);
-        tabbedPane.addTab("�û��б�", imageIcon, tabPanelA, "����鿴�û��б�"); // ����ǩ�����ӵ�ѡ���
+        tabbedPane.addTab("Messages", imageIcon, tabPanelA, "Messages List");
         final JLabel tabLabelB = new JLabel();
-        tabLabelB.setText("�û�����");
-        tabbedPane.addTab("�û�����", imageIcon, tabLabelB, "����鿴�û�����");
+        tabLabelB.setText("Friends");
+        tabbedPane.addTab("Friends", imageIcon, tabLabelB, "Friends List");
         final JLabel tabLabelC = new JLabel();
-        tabLabelC.setText("��ϢȺ��");
-        tabbedPane.addTab("��ϢȺ��", imageIcon, tabLabelC, "����鿴��ϢȺ��");
+        tabLabelC.setText("Group");
+        tabbedPane.addTab("Group", imageIcon, tabLabelC, "Group send");
         tabbedPane.setSelectedIndex(0);
         func.add(btnPicture);
         func.add(btnSend);
@@ -132,7 +122,7 @@ public class HomePage extends JFrame {
             JButton btn = (JButton) e.getSource();
 
             if (btn == btnPicture) {
-                FileNameExtensionFilter PicFilter = new FileNameExtensionFilter("ͼ���ļ���JPG/PNG/BMP/GIF��", "JPG", "JPEG", "PNG", "BMP", "GIF"); // �����ļ���������ֻ�г�ͼƬ
+                FileNameExtensionFilter PicFilter = new FileNameExtensionFilter(".JPG/PNG/BMP/GIF", "JPG", "JPEG", "PNG", "BMP", "GIF");
                 chooser.setFileFilter(PicFilter);
                 int result = chooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
