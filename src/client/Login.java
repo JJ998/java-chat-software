@@ -77,6 +77,8 @@ public class Login extends JFrame implements ActionListener {
                 }
             }
 
+            Customer user = Data.getCustomerbyUsername(userName);
+
             if (i < Data.customers.size()) {
                 JOptionPane.showMessageDialog(this, "welcome, " + userName, "welcome", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();

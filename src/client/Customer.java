@@ -3,6 +3,7 @@ package client;
 import java.util.ArrayList;
 
 public class Customer {
+    private int id;
     protected static String userName = null;
     protected String password = null;
     ArrayList<Integer> friends = null;
@@ -33,6 +34,10 @@ public class Customer {
 
     public void setPSW(String password) {
         this.password = password;
+    }
+
+    void setId(int id) {
+        this.id = id;
     }
 
 }
