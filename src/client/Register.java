@@ -79,11 +79,14 @@ public class Register extends JFrame implements ActionListener {
             if (customer != null) {
                 JOptionPane.showMessageDialog(this, "username exist", "failed", JOptionPane.ERROR_MESSAGE);
             } else {
-                Data.addCustomer(new Customer(userName, password, null));
-                JOptionPane.showMessageDialog(this, "welcome, " + userName, "welcome",
-                        JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-                new Login();
+                boolean addRes = Data.addCustomer(new Customer(userName, password, null));
+                if (addRes) {
+                    JOptionPane.showMessageDialog(this, "welcome, " + userName, "welcome",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                    new Login();
+                } else
+                    JOptionPane.showMessageDialog(this, "register failed!", "failed", JOptionPane.ERROR_MESSAGE);
             }
         } else if (btn == btnReset) {
             txtUserName.setText("");

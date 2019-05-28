@@ -10,38 +10,18 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Client extends Thread {
+public class Client {
     public static int SERVICE_PORT = 8080;
     public static String IP = "localhost";
-    static String username = "";
-
     static PrintWriter pwtoserver = null;
 
-    static JTextArea messages = new JTextArea();
-    JTextField text = new JTextField();
-    ActionListener sendListner = new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String message = username + ": " + text.getText();
-            messages.append(message + "\n");
-            try {
-                pwtoserver.println(message);
-                pwtoserver.flush();
-            } catch (Exception err) {
-                messages.append("network error!\n");
-            }
-        }
-    };
-
-    public Client(String ip, int port, String name) {
-        IP = ip;
-        SERVICE_PORT = port;
-        username = name;
+    public static void main(String[] args) {
+        Data.init();
+        Login login = new Login();
     }
 
-    public static void runClient() {
-        System.out.println("client start");
+    public void run() {
+        System.out.println("Connecting to server...");
         Socket socket = null;
         Scanner inScanner = null;
         try {
@@ -52,22 +32,12 @@ public class Client extends Thread {
 
             while (true) {
                 String indata = inScanner.nextLine();
-                messages.append(indata + "\n");
             }
         } catch (UnknownHostException e) {
-            System.out.println("connection failed");
+            System.out.println("couldn\'t find server!");
+            // e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public void run() {
-        JFrame frame = new JFrame(username);
-        frame.getContentPane().setLayout(new BorderLayout());
-        messages.setEditable(false);
-
-        JPanel textarea = new JPanel();
-        textarea.setLayout(new BorderLayout());
-    }
-
 }

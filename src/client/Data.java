@@ -10,23 +10,23 @@ class Data {
     private static Connection con;
     private static ResultSet rs;
     // mysql8+
-    private static String driver = "com.mysql.cj.jdbc.Driver";
-    private static String url = "jdbc:mysql://localhost/chatdb?useSSL=FALSE&serverTimezone=UTC";
+    /*private static String driver = "com.mysql.cj.jdbc.Driver";
+    private static String url = "jdbc:mysql://localhost/chatdb?useSSL=FALSE&serverTimezone=UTC";*/
     // mysql5.x
-    /*static String driver = "com.mysql.jdbc.Driver";
-    static String url = "jdbc:mysql://localhost:3306/chatdb";*/
+    static String driver = "com.mysql.jdbc.Driver";
+    static String url = "jdbc:mysql://localhost:3306/chatdb";
     private static String user = "root";
-    //    static String password = "19981114";
-    private static String password = "981114";
+    private static String password = "19981114";
+//    private static String password = "981114";
 
     static void init() {
         customers.add(new Customer("ark", "123", null));
     }
     static void exit() {
         try {
-            if (!con.isClosed())
+            if (con != null && !con.isClosed())
                 con.close();
-            if (!rs.isClosed())
+            if (rs != null && !rs.isClosed())
                 rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,12 +35,7 @@ class Data {
 
     private static void read(String table, String where) {
         try {
-            if (!con.isClosed() || con == null) {
-                Class.forName(driver);
-                con = DriverManager.getConnection(url, user, password);
-            }
-            if (!con.isClosed())
-                System.out.println("Succeeded connecting to the Database!");
+            connectDb();
             Statement statement = con.createStatement();
             String readSQL = "select * from " + table + " where " + where;
             System.out.println("execute: " + readSQL);
@@ -55,15 +50,18 @@ class Data {
         }
     }
 
+    private static void connectDb() throws SQLException, ClassNotFoundException {
+        if (con == null || !con.isClosed()) {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, user, password);
+        }
+        if (!con.isClosed())
+            System.out.println("Succeeded connecting to the Database!");
+    }
+
     private static boolean write(PreparedStatement psql) {
         try {
-            if (!con.isClosed() || con == null) {
-                Class.forName(driver);
-                con = DriverManager.getConnection(url, user, password);
-            }
-            if (!con.isClosed()) {
-                System.out.println("Succeeded connecting to the Database!");
-            }
+            connectDb();
             psql.executeUpdate(); // 执行更新
             return true;
         } catch (ClassNotFoundException e) {
@@ -80,17 +78,14 @@ class Data {
     }
 
     public static Customer getCustomerbyId(Integer id) {
-//        String where = "id=" + id.toString();
-        Double randName = Math.random();
-        return new Customer(randName.toString(), "1232", null);
-    }
-
-    public static Customer getCustomerbyUsername(String username) {
-        String where = "username=\"" + username + "\"";
         try {
-            String password = rs.getString("password");
-            String friends = rs.getString("friends");
-            if (!password.isEmpty() && !friends.isEmpty()) return new Customer(username, null, friends);
+            String where = "id=" + id.toString();
+            read("users", where);
+            while (rs.next()) {
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                if (!password.isEmpty() && !username.isEmpty()) return new Customer(username, password, null);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -98,7 +93,23 @@ class Data {
         return null;
     }
 
-    public static boolean addCustomer(Customer customer) {
+    public static Customer getCustomerbyUsername(String username) {
+        String where = "username=\"" + username + "\"";
+        try {
+            read("users", where);
+            while (rs.next()) {
+                String friends = rs.getString("friends");
+                String password = rs.getString("password");
+                if (!password.isEmpty() && !friends.isEmpty()) return new Customer(username, password, friends);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+    static boolean addCustomer(Customer customer) {
         PreparedStatement psql;
         try {
             psql = con.prepareStatement("insert into users (username, password, friends) "
@@ -107,9 +118,11 @@ class Data {
             psql.setString(2, customer.getPSW());
             ArrayList<Integer> friends = customer.getFriends();
             String friendsList = "";
-            for(Integer tmp:friends)
-                friendsList = friendsList + tmp + ",";
-            psql.setString(3, friendsList.substring(0, friendsList.lastIndexOf(",")-1));
+            if (friends != null) {
+                for (Integer tmp : friends)
+                    friendsList = friendsList + tmp + ",";
+                psql.setString(3, friendsList.substring(0, friendsList.lastIndexOf(",") - 1));
+            } else psql.setString(3, friendsList);
             return write(psql);
         } catch (SQLException e) {
             e.printStackTrace();

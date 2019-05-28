@@ -62,7 +62,7 @@ public class HomePage extends JFrame {
         int i = 0;
         for (Integer friend_id : user.friends) {
             Customer friend = Data.getCustomerbyId(friend_id);
-            usernames[i++] = friend.getUserName();
+            if (friend != null) usernames[i++] = friend.getUserName();
         }
         userlist.setListData(usernames);
 
@@ -74,7 +74,6 @@ public class HomePage extends JFrame {
                 for (int index : indices) {
                     System.out.println("user" + index + " = " + listModel.getElementAt(index));
                 }
-                System.out.println();
             }
         });
 

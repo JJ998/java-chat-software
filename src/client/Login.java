@@ -18,11 +18,6 @@ public class Login extends JFrame implements ActionListener {
         initComponent();
     }
 
-    public static void main(String[] args) {
-        Data.init();
-        Login login = new Login();
-    }
-
     public void initComponent() {
         lbUserName = new JLabel("username");
         lbPSW = new JLabel("password");
@@ -69,7 +64,6 @@ public class Login extends JFrame implements ActionListener {
 
             userName = txtUserName.getText().trim();
             password = new String(txtPSW.getPassword());
-            int i;
 
             Customer user = Data.getCustomerbyUsername(userName);
 
