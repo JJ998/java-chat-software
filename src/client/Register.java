@@ -76,11 +76,7 @@ public class Register extends JFrame implements ActionListener {
             userName = txtUserName.getText().trim();
             password = new String(txtPSW.getPassword());
 
-            for (i = 0; i < Data.customers.size(); i++) {
-                if (Customer.getUserName().equals(userName)) {
-                    break;
-                }
-            }
+
 
             if (i < Data.customers.size()) {
                 JOptionPane.showMessageDialog(this, "username exist", "failed", JOptionPane.ERROR_MESSAGE);

@@ -72,9 +72,9 @@ public class Login extends JFrame implements ActionListener {
             int i;
 
             for (i = 0; i < Data.customers.size(); i++) {
-                if (Customer.getUserName().equals(userName) && Data.customers.get(i).getPSW().equals(password)) {
-                    break;
-                }
+//                if (Customer.getUserName().equals(userName) && Data.customers.get(i).getPSW().equals(password)) {
+//                    break;
+//                }
             }
 
             Customer user = Data.getCustomerbyUsername(userName);
