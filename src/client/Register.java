@@ -71,17 +71,15 @@ public class Register extends JFrame implements ActionListener {
 
             String userName = null;
             String password = null;
-            int i;
-
             userName = txtUserName.getText().trim();
             password = new String(txtPSW.getPassword());
 
+            Customer customer = Data.getCustomerbyUsername(userName);
 
-
-            if (i < Data.customers.size()) {
+            if (customer != null) {
                 JOptionPane.showMessageDialog(this, "username exist", "failed", JOptionPane.ERROR_MESSAGE);
             } else {
-                Data.customers.add(new Customer(userName, password));
+                Data.addCustomer(new Customer(userName, password, null));
                 JOptionPane.showMessageDialog(this, "welcome, " + userName, "welcome",
                         JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();

@@ -71,19 +71,12 @@ public class Login extends JFrame implements ActionListener {
             password = new String(txtPSW.getPassword());
             int i;
 
-            for (i = 0; i < Data.customers.size(); i++) {
-//                if (Customer.getUserName().equals(userName) && Data.customers.get(i).getPSW().equals(password)) {
-//                    break;
-//                }
-            }
-
             Customer user = Data.getCustomerbyUsername(userName);
 
-            if (i < Data.customers.size()) {
+            if (user != null && user.getPSW().equals(password)) {
                 JOptionPane.showMessageDialog(this, "welcome, " + userName, "welcome", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
-                Customer cus = new Customer("test", "111");
-                new HomePage(cus);
+                new HomePage(user);
             } else {
                 JOptionPane.showMessageDialog(this, "wrong username or password", "login failed", JOptionPane.ERROR_MESSAGE);
             }

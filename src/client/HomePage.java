@@ -17,13 +17,15 @@ public class HomePage extends JFrame {
     protected JButton btnUserGroup, btnMessageGroup, btnPicture, btnSend;
     Data db = new Data();
     private JFileChooser chooser = new JFileChooser();
+    private Customer user;
 
     public HomePage(Customer cus) {
         super("Home");
-        initComponent(cus);
+        user = cus;
+        initComponent();
     }
 
-    public void initComponent(Customer cus) {
+    public void initComponent() {
         BorderLayout function_layout = new BorderLayout();
         JPanel function_window = new JPanel(function_layout); // friend list container
         this.add(function_window, BorderLayout.WEST);
@@ -43,7 +45,7 @@ public class HomePage extends JFrame {
         });
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-        HUserName = new JLabel("User " + Customer.getUserName());
+        HUserName = new JLabel("User " + user.getUserName());
         btnUserGroup = new JButton("Friends");
         btnMessageGroup = new JButton("Message");
 
@@ -55,12 +57,12 @@ public class HomePage extends JFrame {
         userlist.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listSelectionModel = userlist.getSelectionModel();
 
-        int lengthoffriends = cus.friends.size();
+        int lengthoffriends = user.friends.size();
         String[] usernames = new String[lengthoffriends];
         int i = 0;
-        for (Integer friend_id : cus.friends) {
-            Customer friend = db.getCustomerbyId(friend_id);
-            usernames[i++] = Customer.getUserName();
+        for (Integer friend_id : user.friends) {
+            Customer friend = Data.getCustomerbyId(friend_id);
+            usernames[i++] = friend.getUserName();
         }
         userlist.setListData(usernames);
 
